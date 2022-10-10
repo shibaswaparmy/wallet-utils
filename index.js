@@ -86,6 +86,7 @@ const readFromStdIn = () => {
 }
 
 const run = async () => {
+  let wallet;
 
   if(args['--help']) {
     return help()
@@ -93,7 +94,8 @@ const run = async () => {
 
   if(args['--get']) {
     const input = readFromStdIn()
-    return getWallet(input.mnemonic, input.hdIdx)
+    wallet = await getWallet(input.mnemonic, input.hdIdx)
+    return JSON.stringify(wallet, null, 2)
   }
 
   let strength = 128
@@ -102,7 +104,8 @@ const run = async () => {
     strength = args['--strength']
   }
 
-  return generate(strength)
+  wallet = await generate(strength)
+  return JSON.stringify(wallet, null, 2)
 }
 
 run().then(console.log).catch(console.log)
